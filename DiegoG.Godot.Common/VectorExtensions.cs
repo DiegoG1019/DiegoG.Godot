@@ -6,6 +6,11 @@ namespace DiegoG.Godot.Common;
 
 public static class VectorExtensions
 {
+    extension(float num)
+    {
+        public static float TwoPi => float.Pi * 2;
+    }
+    
     public static Vector2 GetPositionFromDistanceAndAngle(float angleRadians, float distance)
         => new Vector2(distance * float.Cos(angleRadians), distance * float.Sin(angleRadians));
 
@@ -21,6 +26,16 @@ public static class VectorExtensions
         /// Takes the X and Z values from the vector and puts them into a Vector2, ignoring the vertical (Y) axis
         /// </summary>
         public Vector2 Horizontal => new Vector2(vec.X, vec.Z);
+
+        /// <summary>
+        /// Takes the Z (as X) and Y values from the vector and puts them into a Vector2, ignoring the X axis
+        /// </summary>
+        public Vector2 VerticalZ => new Vector2(vec.Z, vec.Y);
+
+        /// <summary>
+        /// Takes the X and Y values from the vector and puts them into a Vector2, ignoring the Z axis
+        /// </summary>
+        public Vector2 VerticalX => new Vector2(vec.X, vec.Y);
     }
 
     extension(Vector4 vec)
@@ -30,6 +45,15 @@ public static class VectorExtensions
         
         public Vector4I ToVector4I()
             => new((int)vec.X, (int)vec.Y, (int)vec.Z, (int)vec.W);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Rect2I ToRectangle()
+            => new(
+                (int)vec.X,
+                (int)vec.Y,
+                (int)vec.Z,
+                (int)vec.W
+            );
     }
 
     extension(Vector2 vec)
@@ -62,6 +86,12 @@ public static class VectorExtensions
         /// </remarks>
         public Vector2 GetVectorAhead(float angleRadians, float distance)
             => GetPositionFromDistanceAndAngle(angleRadians, distance) + vec;
+
+        /// <summary>
+        /// Creates a new Vector3 with its X and Y components taken from <paramref name="vec"/>, and Z set to 0
+        /// </summary>
+        public Vector3 ToVector3(float z = 0) => new Vector3(vec.X, vec.Y, z);
+        public Vector2 Reversed => new Vector2(vec.Y, vec.X);
 
         public Vector2 RotatedAround(Vector2 origin, float angle)
         {
@@ -100,15 +130,6 @@ public static class VectorExtensions
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vector2I Vector2I(this ulong value)
         => unchecked(new((int)value, (int)((value) >> 32)));
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static Rect2I ToRectangle(this Vector4 vec)
-        => new(
-            (int)vec.X,
-            (int)vec.Y,
-            (int)vec.Z,
-            (int)vec.W
-        );
 
     extension(in Rect2 rect)
     {

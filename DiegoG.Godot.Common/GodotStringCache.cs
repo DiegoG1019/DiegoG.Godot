@@ -26,5 +26,4 @@ public readonly struct GodotStringCache
     }
 
     public static implicit operator StringName(GodotStringCache ch) => ch.StringName;
-    public static implicit operator string(GodotStringCache ch) => ch.DotNetString;
 }
