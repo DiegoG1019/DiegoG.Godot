@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace DiegoG.Godot.Common.Tasks;
+namespace DiegoG.Godot.Common;
 
 public static class LayerBits
 {

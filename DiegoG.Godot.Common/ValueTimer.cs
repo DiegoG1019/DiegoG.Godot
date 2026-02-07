@@ -7,8 +7,14 @@ public static class ValueTimerExtensions
         public void Reset()
             => val = val.ToResetTimer();
 
-        public void AddDelta(double delta)
-            => val = val.WithAddedDelta(delta);
+        public bool AddDelta(double delta)
+        {
+            val = val.WithAddedDelta(delta);
+            return val.IsElapsed;
+        }
+
+        public void SetTarget(double target)
+            => val = val.WithNewTarget(target);
     }
 }
 
@@ -22,6 +28,9 @@ public readonly record struct ValueTimer(double AccumulatedDelta, double Target)
 
     public ValueTimer ToResetTimer() => new ValueTimer(0, Target);
     public ValueTimer WithAddedDelta(double delta) => new(AccumulatedDelta + delta, Target);
+    public ValueTimer WithNewTarget(double target) => new(AccumulatedDelta, target);
+
+    public double PercentageDone => AccumulatedDelta / Target;
     
     public bool IsElapsed => AccumulatedDelta > Target;
 

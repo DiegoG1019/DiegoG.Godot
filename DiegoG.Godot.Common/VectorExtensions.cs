@@ -1,14 +1,53 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Numerics;
+using System.Runtime.CompilerServices;
 using System.Xml.Schema;
 using Godot;
+using Vector2 = Godot.Vector2;
+using Vector3 = Godot.Vector3;
+using Vector4 = Godot.Vector4;
 
 namespace DiegoG.Godot.Common;
 
 public static class VectorExtensions
 {
+    public static bool ApproximateEquals(this double a, double b, double tolerance = 0.01f)
+        => double.Abs(a - b) < tolerance;
+
+    public static bool ApproximateEquals(this float a, float b, float tolerance = 0.01f)
+        => float.Abs(a - b) < tolerance;
+
+    public static bool ApproximateEquals(this Vector2 a, Vector2 b, float tolerance = 0.01f)
+        => a.ApproximateEquals(b, new Vector2(tolerance, tolerance));
+
+    public static bool ApproximateEquals(this Vector2 a, Vector2 b, Vector2 tolerance)
+        => (a - b).Abs() < tolerance;
+
+    public static bool ApproximateEquals(this Vector3 a, Vector3 b, float tolerance = 0.01f)
+        => a.ApproximateEquals(b, new Vector3(tolerance, tolerance, tolerance));
+
+    public static bool ApproximateEquals(this Vector3 a, Vector3 b, Vector3 tolerance)
+        => (a - b).Abs() < tolerance;
+
+    public static bool ApproximateEquals(this Vector4 a, Vector4 b, float tolerance = 0.01f)
+        => a.ApproximateEquals(b, new Vector4(tolerance, tolerance, tolerance, tolerance));
+
+    public static bool ApproximateEquals(this Vector4 a, Vector4 b, Vector4 tolerance)
+        => (a - b).Abs() < tolerance;
+
+    public static bool ApproximateEquals<T>(this T a, T b, T tolerance) where T : IFloatingPointIeee754<T>
+        => T.Abs(a - b) < tolerance;
+    
     extension(float num)
     {
+        /// <summary>
+        /// 360 degrees
+        /// </summary>
         public static float TwoPi => float.Pi * 2;
+        
+        /// <summary>
+        /// 90 degrees
+        /// </summary>
+        public static float HalfPi => float.Pi / 2;
     }
     
     public static Vector2 GetPositionFromDistanceAndAngle(float angleRadians, float distance)
@@ -185,6 +224,24 @@ public static class VectorExtensions
         
         public Vector2 CenterLeft 
             => new Vector2(rect.Position.X, rect.Position.Y + rect.Size.Y * 0.5f);
+
+        public float CenterX
+            => rect.Position.X + rect.Size.X * .5f;
+
+        public float CenterY
+            => rect.Position.Y + rect.Size.Y * .5f;
+
+        public float QuarterLeft
+            => rect.Position.X + rect.Size.X * .75f;
+
+        public float QuarterRight 
+            => rect.Position.X + rect.Size.X * .25f;
+
+        public float QuarterTop
+            => rect.Position.Y + rect.Size.Y * .75f;
+
+        public float QuarterBottom 
+            => rect.Position.Y + rect.Size.Y * .25f;
     }
 
     extension(Rect2I rect)

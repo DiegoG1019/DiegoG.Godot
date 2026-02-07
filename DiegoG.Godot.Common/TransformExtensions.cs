@@ -4,12 +4,14 @@ namespace DiegoG.Godot.Common;
 
 public static class TransformExtensions
 {
-    /*
     extension(Transform3D trans)
     {
         /// <summary>
         /// Returns a transform interpolated between this transform and another transform by a given weight (on the range of 0.0 to 1.0).
         /// </summary>
+        /// <remarks>
+        /// This method was decompiled from the original InterpolateWith, and modified to accept the new parameters
+        /// </remarks>
         /// <param name="other">The other transform</param>
         /// <param name="rotationWeight">A Vector containing values on the range of 0.0 to 1.0, representing the amount of interpolation for the rotation</param>
         /// <param name="scaleWeight">A Vector containing values on the range of 0.0 to 1.0, representing the amount of interpolation for the scale</param>
@@ -21,6 +23,9 @@ public static class TransformExtensions
         /// <summary>
         /// Returns a transform interpolated between this transform and another transform by a given weight (on the range of 0.0 to 1.0).
         /// </summary>
+        /// <remarks>
+        /// This method was decompiled from the original InterpolateWith, and modified to accept the new parameters
+        /// </remarks>
         /// <param name="other">The other transform</param>
         /// <param name="weight">A Vector containing values on the range of 0.0 to 1.0, representing the amount of interpolation for each transform. X: Rotation, Y: Scale, Z: Origin</param>
         /// <returns>The interpolated transform.</returns>
@@ -41,19 +46,36 @@ public static class TransformExtensions
         }
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// This method was decompiled from the original <b><i>private</i></b> method. Only use it if you really know what you're doing
+    /// </remarks>
     public static void SetBasisQuaternionScale(ref Basis bs, in Quaternion q, Vector3 scale)
     {
         SetBasisDiagonal(ref bs, scale);
         RotateBasis(ref bs, q);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// This method was decompiled from the original <b><i>private</i></b> method. Only use it if you really know what you're doing
+    /// </remarks>
     public static void SetBasisDiagonal(ref Basis bs, Vector3 diagonal)
     {
         bs.Row0 = new Vector3(diagonal.X, 0.0f, 0.0f);
         bs.Row1 = new Vector3(0.0f, diagonal.Y, 0.0f);
         bs.Row2 = new Vector3(0.0f, 0.0f, diagonal.Z);
     }
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <remarks>
+    /// This method was decompiled from the original <b><i>private</i></b> method. Only use it if you really know what you're doing
+    /// </remarks>
     public static void RotateBasis(ref Basis bs, Quaternion quaternion) => bs = new Basis(quaternion) * bs;
-    //*/
 }
