@@ -3,14 +3,17 @@ using Godot;
 
 namespace DiegoG.Godot.Common;
 
-public sealed class DataGrid<T>(BoundedSquareGrid bounds)
+public class DataGrid<T>(BoundedSquareGrid bounds)
 {
-    #if DEBUG
-    public 
-    #else
-    private
-    #endif
-    T[,] _dat = new T[bounds.XCells, bounds.YCells];
+    private T[] _dat = new T[bounds.XCells * bounds.YCells];
+
+    public static T[] GetDataArray(DataGrid<T> grid) => grid._dat;
+
+    public static int Index(int x, int y, int columns)
+        => (y * columns) + x;
+
+    public int Index(int x, int y) => Index(x, y, XLength);
+    public ref T GetData(int x, int y) => ref _dat[Index(x, y)];
 
     public BoundedSquareGrid Bounds { get; } = bounds;
 
@@ -130,10 +133,10 @@ public sealed class DataGrid<T>(BoundedSquareGrid bounds)
             get
             {
                 #if DEBUG
-                if (x < 0 || x >= grid._dat.GetLength(0) || y < 0 || y >= grid._dat.GetLength(1)) 
+                if (x < 0 || x >= grid.XLength || y < 0 || y >= grid.YLength) 
                     Debugger.Break();
                 #endif
-                return ref grid._dat[x, y];
+                return ref grid.GetData(x, y);
             }
         }
     }

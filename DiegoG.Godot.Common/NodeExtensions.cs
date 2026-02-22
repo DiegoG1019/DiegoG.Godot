@@ -13,6 +13,30 @@ public static class NodeExtensions
     
     public readonly record struct EnumerateNodeTreeInfo(Node Current, int Level);
     
+    public static void RemoveChildThreadSafe(this Node parentNode, Node child)
+    {
+        if (GodotThread.IsMainThread())
+            parentNode.RemoveChild(child);
+        else
+            parentNode.CallDeferred(Node.MethodName.RemoveChild, child);
+    }
+    
+    public static void AddChildThreadSafe(this Node parentNode, Node child)
+    {
+        if (GodotThread.IsMainThread())
+            parentNode.AddChild(child);
+        else
+            parentNode.CallDeferred(Node.MethodName.AddChild, child);
+    }
+
+    public static void ReparentThreadSafe(this Node node, Node newParent, bool keepGlobalTransform = true)
+    {
+        if (GodotThread.IsMainThread())
+            node.Reparent(newParent, keepGlobalTransform);
+        else
+            node.CallDeferred(Node.MethodName.Reparent, newParent, keepGlobalTransform);
+    }
+    
     public static IEnumerable<Node> EnumerateParents(this Node cn)
     {
         var p = cn;

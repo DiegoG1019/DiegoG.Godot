@@ -4,6 +4,7 @@ using Godot;
 
 namespace DiegoG.Godot.Common;
 
+/*
 public readonly struct GodotStringCache
 {
     private static readonly ConcurrentDictionary<string, GodotStringCache> StringCache = new(); 
@@ -26,4 +27,4 @@ public readonly struct GodotStringCache
     }
 
     public static implicit operator StringName(GodotStringCache ch) => ch.StringName;
-}
+}// /*

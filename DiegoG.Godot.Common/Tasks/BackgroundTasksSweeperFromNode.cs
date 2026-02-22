@@ -6,6 +6,11 @@ namespace DiegoG.Godot.Common.Tasks;
 
 public static class BackgroundTasksSweeperFromNode 
 {
+    static BackgroundTasksSweeperFromNode()
+    {
+        Stopwatch.Restart();
+    }
+    
     private static readonly Stopwatch Stopwatch = new();
     private static Task? sweep;
     
@@ -25,8 +30,14 @@ public static class BackgroundTasksSweeperFromNode
             if (sweep.IsCompleted)
             {
 #pragma warning disable VSTHRD002 // Task is known to be completed
-                sweep.ConfigureAwait(false).GetAwaiter().GetResult();
-                sweep = null;
+                try
+                {
+                    sweep.ConfigureAwait(false).GetAwaiter().GetResult();
+                }
+                finally
+                {
+                    sweep = null;
+                }
             }
             else return; // Only return if it's not null and has not been completed
         }

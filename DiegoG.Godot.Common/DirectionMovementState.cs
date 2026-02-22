@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Godot;
 
 namespace DiegoG.Godot.Common;
@@ -36,6 +37,7 @@ public struct DirectionMovementState(int x, int y)
             case CardinalDirection.North:
                 Y--;
                 break;
+            /*
             case CardinalDirection.NorthWest:
                 Y--;
                 X++;
@@ -52,6 +54,7 @@ public struct DirectionMovementState(int x, int y)
                 Y--;
                 X--;
                 break;
+            //*/
             default:
                 throw new ArgumentOutOfRangeException();
         }
@@ -74,18 +77,11 @@ public struct DirectionMovementState(int x, int y)
         var prev = Position;
         Move();
 
-        if ((CardinalDirection is CardinalDirection.East && X >= rectangle.Left)
-            || (CardinalDirection is CardinalDirection.West && X < rectangle.Right)
-            || (CardinalDirection is CardinalDirection.North && Y >= rectangle.Top)
-            || (CardinalDirection is CardinalDirection.South && Y < rectangle.Bottom))
-        {
-            CheckPosition(rectangle);
+        if (CheckPosition(rectangle))
             return true;
-        }
-
+        
         Position = prev;
-        CheckPosition(rectangle);
-        return false;
+        return CheckPosition(rectangle);
     }
     
     public void MoveWithinBounds(Rect2I rectangle, BoundsCheckReaction boundsCheck = BoundsCheckReaction.Stop)
@@ -175,7 +171,14 @@ public struct DirectionMovementState(int x, int y)
 
     public void RandomizeDirection(Random? random = null)
     {
-        CardinalDirection = (CardinalDirection)((random ?? Random.Shared).Next() % 4);
+        CardinalDirection = ((random ?? Random.Shared).Next() % 4) switch
+        {
+            0 => CardinalDirection.North,
+            1 => CardinalDirection.West,
+            2 => CardinalDirection.South,
+            3 => CardinalDirection.East,
+            _ => throw new InvalidProgramException("Only values 0 to 3 should be possible")
+        };
     }
     
     private bool CheckPosition(in Rect2I rectangle)

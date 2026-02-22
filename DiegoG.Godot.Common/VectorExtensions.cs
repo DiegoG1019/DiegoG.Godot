@@ -10,6 +10,48 @@ namespace DiegoG.Godot.Common;
 
 public static class VectorExtensions
 {
+    public static bool SharesAnAxisWith(this Vector2 vec, Vector2 other)
+        => vec.X.ApproximateEquals(other.X) || vec.Y.ApproximateEquals(other.Y);
+    
+    /// <summary>
+    /// Converts the rectangle into a set of four vertices and writes them into <paramref name="vertices"/>, starting from the bottom left, clockwise
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="vertices"/> has a length of less than 4</exception>
+    public static void ToPolygon(this Rect2I rect, Span<Vector2I> vertices)
+    {
+        if (vertices.Length < 4) throw new ArgumentException("Because rectangles only have four vertices, the output span must have at least a length of 4");
+        vertices[0] = rect.TopLeft;
+        vertices[1] = rect.TopRight;
+        vertices[2] = rect.BottomRight;
+        vertices[3] = rect.BottomLeft;
+    }
+    
+    /// <summary>
+    /// Converts the rectangle into a set of four vertices and writes them into <paramref name="vertices"/>, starting from the top left, clockwise
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="vertices"/> has a length of less than 4</exception>
+    public static void ToPolygon(this Rect2I rect, Span<Vector2> vertices)
+    {
+        if (vertices.Length < 4) throw new ArgumentException("Because rectangles only have four vertices, the output span must have at least a length of 4");
+        vertices[0] = rect.TopLeft;
+        vertices[1] = rect.TopRight;
+        vertices[2] = rect.BottomRight;
+        vertices[3] = rect.BottomLeft;
+    }
+    
+    /// <summary>
+    /// Converts the rectangle into a set of four vertices and writes them into <paramref name="vertices"/>, starting from the bottom left, clockwise
+    /// </summary>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="vertices"/> has a length of less than 4</exception>
+    public static void ToPolygon(this Rect2 rect, Span<Vector2> vertices)
+    {
+        if (vertices.Length < 4) throw new ArgumentException("Because rectangles only have four vertices, the output span must have at least a length of 4");
+        vertices[0] = rect.TopLeft;
+        vertices[1] = rect.TopRight;
+        vertices[2] = rect.BottomRight;
+        vertices[3] = rect.BottomLeft;
+    }
+    
     public static bool ApproximateEquals(this double a, double b, double tolerance = 0.01f)
         => double.Abs(a - b) < tolerance;
 
@@ -273,6 +315,18 @@ public static class VectorExtensions
             => rect.Position;
 
         public Vector2I BottomRight
+            => rect.End;
+        
+        public Vector2 TopRightF
+            => new(rect.Position.X + rect.Size.X, rect.Position.Y);
+
+        public Vector2 BottomLeftF
+            => new(rect.Position.X, rect.Position.Y + rect.Size.Y);
+
+        public Vector2 TopLeftF
+            => rect.Position;
+
+        public Vector2 BottomRightF
             => rect.End;
         
         public float Top
